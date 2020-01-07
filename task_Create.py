@@ -26,34 +26,33 @@ class Task(object):
     def __init__(self, dataSize, priority, value, frequencyLocal, timeLocal, energyLocal, frequencyMEC, timeMEC, energyMEC,
                  bandwidth,timeTransmit, energyTransmit, ifOffload, payForMEC, numOfWBAN, timeWait, timeInto, timeOut, timeslice):
 
-        self.dataSize = 0  # 任务的数据量
-        self.priority = 0  # 任务的优先级
-        # pow(self.priority,2) * math.log2(1+self.dataSize)      ##任务的价值
-        self.value = 0
+        self.dataSize = dataSize                                       # 任务的数据量
+        self.priority = priority                                       # 任务的优先级
+        self.value = value                                             # 任务的价值
 
-        self.frequencyLocal = 0  # 算法分配给该任务的本地CPU计算频率
-        self.timeLocal = 0  # 该任务在本地执行所需要的时间
-        self.energyLocal = 0  # 该任务在本地执行所需要的能耗
+        self.frequencyLocal = frequencyLocal                           # 算法分配给该任务的本地CPU计算频率
+        self.timeLocal = timeLocal                                     # 该任务在本地执行所需要的时间
+        self.energyLocal = energyLocal                                 # 该任务在本地执行所需要的能耗
 
-        self.frequencyMEC = 0  # 算法分配给该任务的服务器CPU计算频率
-        self.timeMEC = 0  # 该任务在服务器执行所需要的时间
-        self.energyMEC = 0  # 该任务在服务器执行所需要的能耗
+        self.frequencyMEC = frequencyMEC                               # 算法分配给该任务的服务器CPU计算频率
+        self.timeMEC = timeMEC                                         # 该任务在服务器执行所需要的时间
+        self.energyMEC = energyMEC                                     # 该任务在服务器执行所需要的能耗
 
-        self.bandwidth = 0      #算法分配给该任务的信道带宽
-        self.timeTransmit = 0  # 该任务由WBAN中心节点发送至服务器需要的时间
-        self.energyTransmit = 0  # 该任务由WBAN中心节点发送至服务器需要的能耗
+        self.bandwidth = bandwidth                                     #算法分配给该任务的信道带宽
+        self.timeTransmit = timeTransmit                               # 该任务由WBAN中心节点发送至服务器需要的时间
+        self.energyTransmit = energyTransmit                           # 该任务由WBAN中心节点发送至服务器需要的能耗
 
-        self.ifOffload = 0  # 该任务是卸载处理还是在本地处理，0：本地处理   1：卸载处理
+        self.ifOffload = ifOffload                                     # 该任务是卸载处理还是在本地处理，0：本地处理   1：卸载处理
+        self.payForMEC = payForMEC                                     # 该任务若卸载处理，需要向边缘服务器所支付的报酬
+        self.numOfWBAN = numOfWBAN                                     # 任务隶属的WBAN号
 
-        self.payForMEC = 0  # 该任务若卸载处理，需要向边缘服务器所支付的报酬
+        self.timeWait = timeWait                                       # 任务在执行缓冲区/发送缓冲区/信道中的等待时间
+        self.timeInto = timeInto                                       # 任务进入缓冲区的时钟时间
+        self.timeOut = timeOut                                         # 任务出缓冲区的时间
 
-        self.timeslice = 0  # 任务隶属的时间批次
+        self.timeslice = timeslice                                     # 任务隶属的时间批次
 
-        self.timeWait = 0  # 任务在执行缓冲区/发送缓冲区/信道中的等待时间
-        self.timeInto = 0  # 任务进入缓冲区的时钟时间
-        self.timeOut = 0  # 任务出缓冲区的时间
-
-        self.numOfWBAN = 0      #任务隶属的WBAN号
+        self.available = True                                          #该任务是否在额定时延内执行完成 
 
     ##################################################################################################################
     

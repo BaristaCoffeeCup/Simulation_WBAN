@@ -35,10 +35,36 @@ gl._init_()
 
 WBAN_A = WBAN(1, 1000, [], [], [], [],True,False)
 WBAN_A.add_Task_List(1,gl)
-'''
+
 
 a = [ []for i in range(2) ]
 a[0] = [1,2,3]
 del a[0][0]
 print(a)
+'''
+
+task1 = Task(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2)
+task2 = Task(0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2)
+task3 = Task(0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
+
+task = []
+task.append(task1)
+task.append(task2)
+task.append(task3)
+task.sort(key = lambda x: (x.timeslice, x.priority))
+
+KEYS = ['数据量', '优先级', '价值', '本地频率', '本地时延', '本地能耗', '云频率', '云时延',
+    '云能耗', '带宽', '发送时延', '发送能耗', '决策', '报酬', '网号', '排队时延', '时间片','有效']
+VALUE = []
+for i in range(len(task)):
+    value = task[i].__dict__.values()
+    value = list(value)
+    for i in range(0, 2):
+        value.pop(16)
+    value = [float(x) for x in value]
+    VALUE.append(value)
+print()
+print(tabulate(VALUE, headers=KEYS, tablefmt='rst', disable_numparse=True))
+print()
+
 

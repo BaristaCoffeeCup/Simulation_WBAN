@@ -144,6 +144,7 @@ class WBAN(object):
             elif check_2 == 1:
                 self.waitBuffer[1][0].timeWait += time - self.waitBuffer[1][0].timeInto     #在任务池中的等待时间
                 self.waitBuffer[1][0].timeInto = time                                       #进入发送缓冲区的时间
+                self.waitBuffer[1][0].set_priority_Task( (self.waitBuffer[1][0].priority+1) * self.priority)     #卸载处理的任务的优先级等于本身任务优先级乘用户优先级
                 self.executionBuffer.append(self.waitBuffer[1][0])
                 del self.waitBuffer[1][0]
 
@@ -217,12 +218,12 @@ class WBAN(object):
     def print_TaskList(self):
 
         KEYS = ['数据量', '优先级', '价值', '本地频率', '本地时延', '本地能耗','云频率', '云时延', '云能耗', '带宽', 
-                '发送时延', '发送能耗', '决策','报酬','网号','排队时延']
+                '发送时延', '发送能耗', '决策','报酬','网号','排队时延','时隙','有效']
         VALUE = []
         for i in range(len(self.taskList)):
             value = self.taskList[i].__dict__.values()
             value = list(value)
-            for i in range(0, 3):
+            for i in range(0, 2):
                 value.pop(16)
             value = [float(x) for x in value]
             VALUE.append(value)
@@ -238,12 +239,12 @@ class WBAN(object):
     def printTransmitBuffer(self):
 
         KEYS = ['数据量', '优先级', '价值', '本地频率', '本地时延', '本地能耗','云频率', '云时延', '云能耗', '带宽', 
-                '发送时延', '发送能耗', '决策','报酬','网号','排队时延']
+                '发送时延', '发送能耗', '决策','报酬','网号','排队时延','时隙','有效']
         VALUE = []
         for i in range(len(self.transmitBuffer)):
             value = self.transmitBuffer[i].__dict__.values()
             value = list(value)
-            for i in range(0, 3):
+            for i in range(0, 2):
                 value.pop(16)
             value = [float(x) for x in value]
             VALUE.append(value)
@@ -259,12 +260,12 @@ class WBAN(object):
     def printExecutionBuffer(self):
 
         KEYS = ['数据量', '优先级', '价值', '本地频率', '本地时延', '本地能耗','云频率', '云时延', '云能耗', '带宽', 
-                '发送时延', '发送能耗', '决策','报酬','网号','排队时延']
+                '发送时延', '发送能耗', '决策','报酬','网号','排队时延','时隙','有效']
         VALUE = []
         for i in range(len(self.executionBuffer)):
             value = self.executionBuffer[i].__dict__.values()
             value = list(value)
-            for i in range(0, 3):
+            for i in range(0, 2):
                 value.pop(16)
             value = [float(x) for x in value]
             VALUE.append(value)
