@@ -156,6 +156,7 @@ class WBAN(object):
     def task_execution(self,Globalmap):
         #获取当前系统时钟
         time = Globalmap().get_value('clocktime')
+        finishBuffer = Globalmap().get_value('finishBuffer')
 
         #判断当前CPU是否空闲，检查exeState变量
         if self.exeState == False:
@@ -167,9 +168,13 @@ class WBAN(object):
             elif (time - self.executionBuffer[0].timeInto) == self.executionBuffer[0].timeLocal:
                 #当前CPU中的任务执行完毕，将该任务从执行缓冲区中取出，放入完成缓冲区，设置CPU空闲
                 self.exeState = True
-                self.finishBuffer.append(self.executionBuffer[0])
+                finishBuffer.append(self.executionBuffer[0])
+                Globalmap.set_value('finishBuffer',finishBuffer)
                 del self.executionBuffer[0]
+                self.task_execution(Globalmap)
+
                 return 0
+
         elif self.exeState == True:
             #当前CPU是空闲的，可以执行任务
             self.executionBuffer[0].timeWait += time - self.executionBuffer[0].timeInto         #该任务在执行缓冲区中等待的时间
@@ -184,7 +189,7 @@ class WBAN(object):
 
 
     #WBAN发送缓冲区的管理，判断当前信道是否可用，发送出的任务放入MEC的等待缓冲区，每个时间片执行一次 处理发送缓冲区第一个业务
-    def task_transmit(self,Globalmap,distance):
+    def task_transmit(self,Globalmap):
 
         #获取当前系统时钟和距离
         time = Globalmap().get_value('clocktime')
@@ -202,12 +207,16 @@ class WBAN(object):
                 self.tranState = True
                 temp = self.transmitBuffer[0]
                 del self.transmitBuffer[0]
+
+                self.task_transmit(distance)
+
                 return temp
+
         elif self.tranState == True:
             #可以发送下一个业务
-            self.transmitBuffer[0].timeWait += time - self.transmitBuffer[0].timeInto
-            self.transmitBuffer[0].timeInto = time      #开始发送该任务的起始时间
-            self.transmitBuffer[0].set_Transmit_Task(distance)      #计算传输时延和传输能耗
+            self.transmitBuffer[0].timeWait += time - self.transmitBuffer[0].timeInto   #在发送缓冲区中等待的时间
+            self.transmitBuffer[0].timeInto = time                                      #任务进入信道的时间
+            self.transmitBuffer[0].set_Transmit_Task(distance)                          #计算传输时延和传输能耗
             self.tranState = False
             return 0
 

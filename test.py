@@ -41,7 +41,7 @@ a = [ []for i in range(2) ]
 a[0] = [1,2,3]
 del a[0][0]
 print(a)
-'''
+
 
 task1 = Task(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2)
 task2 = Task(0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2)
@@ -66,5 +66,11 @@ for i in range(len(task)):
 print()
 print(tabulate(VALUE, headers=KEYS, tablefmt='rst', disable_numparse=True))
 print()
+'''
 
+def c(l):
+    for i in range(len(l)):
+        print(l[i])
 
+a = [1,2,3,4,5,6,7,8,9]
+c(a)

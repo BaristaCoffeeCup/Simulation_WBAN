@@ -10,7 +10,7 @@ import operator
 class Globalmap(object):
 
     def _init_(self):
-        self._global_dict = {'clocktime':0,'distance':100}
+        self._global_dict = {'clocktime':0,'distance':100,'finishBuffer':[]}
 
 
     def set_value(self,name,value):
