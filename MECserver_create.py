@@ -19,7 +19,7 @@ class MEC(object):
 
         # 每个WBAN共四个CPU，各有一个执行缓冲区
         self.executionBuffer = [[]for i in range(4)]
-        # 等待分配缓冲区，该缓冲区的容量默认为无限大，该缓冲区实际并不存在
+        # 等待分配缓冲区，该缓冲区实际并不存在
         self.waitBuffer = []
         # 当前四个CPU是否可以执行CPU缓冲区中的下一个任务
         self.exeBufferState = [True, True, True, True]
@@ -31,8 +31,7 @@ class MEC(object):
     def waitbuffer_addTask(self, Task):
         # 每次向等待分配缓冲区放入一个任务，都需要将缓冲区队列进行一次排序,排队缓冲区内按优先级从高到低排列
         self.waitBuffer.append(Task)
-        self.waitBuffer = sorted(
-            self.waitBuffer, key=operator.attrgetter('priority'))
+        self.waitBuffer = sorted(self.waitBuffer, key=operator.attrgetter('priority'))
         self.waitBuffer = self.waitBuffer.reverse()
 
     ##################################################################################################################
@@ -86,6 +85,7 @@ class MEC(object):
         # 获取当前系统时钟
         time = Globalmap().get_value('clocktime')
         finishBuffer = Globalmap().get_value('finishBuffer')
+        unavailableBuffer = Globalmap().get_value('unavailableBuffer')
 
         # 首先循环判断当前四个CPU是否空闲
         for i in range(len(self.executionBuffer)):
@@ -104,12 +104,22 @@ class MEC(object):
 
         #将处理完成的任务取出后，再处理缓冲区中的下一个任务
         for i in range(len(self.executionBuffer)):
-            #如果当前CPU空闲
-            if self.exeBufferState[i] == True:
+            
+            #判断当前将要执行的任务在执行时是否会超时
+            check = WBAN.checkTaskAvailable(self.executionBuffer[i][0])
+
+            if check == -1:
+                self.exeBufferState[i] == True
+                #将不满足执行统条件的任务送入失效列表
+                unavailableBuffer.append(self.executionBuffer[i][0])
+                Globalmap.set_value('unavailableBuffer', unavailableBuffer)
+                del self.executionBuffer[i][0]
+                self.MEC_TaskExecution(Globalmap)
+
+            elif check == 1:
                 self.waitBuffer[i][0].timeWait += time - self.waitBuffer[i][0].timeInto     #任务在执行缓冲区中等待的时间
                 self.waitBuffer[i][0].set_MEC_Task()                                        #计算该任务的卸载执行时延和能耗
                 self.waitBuffer[i][0].timeInto = time                                       #该任务调度进入CPU的时间
-
                 self.exeBufferState[i] == False
 
 

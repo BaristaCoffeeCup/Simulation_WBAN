@@ -66,7 +66,7 @@ for i in range(len(task)):
 print()
 print(tabulate(VALUE, headers=KEYS, tablefmt='rst', disable_numparse=True))
 print()
-'''
+
 
 def c(l):
     for i in range(len(l)):
@@ -74,3 +74,8 @@ def c(l):
 
 a = [1,2,3,4,5,6,7,8,9]
 c(a)
+'''
+
+a = [1,2,3,4,5,6,7]
+a.remove(2)
+print( a)

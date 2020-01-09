@@ -10,6 +10,8 @@ mpl.rcParams['font.sans-serif'] = [u'SimHei']
 mpl.rcParams['axes.unicode_minus'] = False
 tabulate.PRESERVE_WHITESPACE = True
 
+from config import Globalmap
+
 '''x1 = np.random.poisson(lam=200,size=1)
 
 for i in range(len(x1)):
@@ -115,6 +117,22 @@ class Task(object):
     #设置任务属于的WBAN的编号
     def set_numWBAN_Task(self,numOfWBAN):
         self.numOfWBAN = numOfWBAN
+
+    #判断当前任务有没有过期
+    def check_available_Task(self):
+        
+        #设置每个优先级的额定处理时延
+        maxDelay = [40000,35000,30000,25000,20000,15000,10000,5000]
+        #根据当前任务的优先级判断任务是否失效
+        index = self.priority
+        if self.timeWait < maxDelay[index]:
+            self.available = False
+            return False
+        elif self.timeWait >= maxDelay[index]:
+            return True
+
+
+        
 
 
 '''
