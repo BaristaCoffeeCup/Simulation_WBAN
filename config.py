@@ -14,7 +14,12 @@ class Globalmap(object):
                              'distance':100,
                              'finishBuffer':[],
                              'unavailableBuffer':[],
-                             'temp':0}
+                             'temp':0,
+                             'timeReal':0,
+                             'Alpha':0,                 #时延因子
+                             'Beta':0                   #能耗因子
+                             
+                             }
 
 
     def set_value(self,name,value):
